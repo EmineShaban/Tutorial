@@ -4,7 +4,7 @@ const { getErrorMessage } = require('../utils/errorHelper')
 const authServices = require('../services/authServices')
 const { COOKIE_SESSION_NAME } = require('../constants')
 const validator = require('validator')
-router.get('/login', isGueat, (req, res) => {
+router.get('/login', isGueat,(req, res) => {
     res.render('auth/login');
 })
 
@@ -20,16 +20,16 @@ router.post('/login', isGueat, async (req, res) => {
     }
 });
 
-router.get('/register', isGueat, (req, res) => {
+router.get('/register',isGueat, (req, res) => {
     res.render('auth/register')
 })
 
-router.post('/register', isGueat, async (req, res) => {
-    if(validator.isEmail(req.body.email) == false){
-        return res.render('auth/register', { error: "Invalid email!" })
-    }
-    if(req.body.password.length <5 ){
-        return res.render('auth/register', { error: "Password must be at leats 5 characters long!" })
+router.post('/register',isGueat, async (req, res) => {
+    // if(validator.isEmail(req.body.email) == false){
+    //     return res.render('auth/register', { error: "Invalid email!" })
+    // }
+    if(req.body.password.length <5 || req.body.username.length <5){
+        return res.render('auth/register', { error: "Password or username must be at leats 5 characters long!" })
     }
     const { password, rePassword, ...userData } = req.body
    
