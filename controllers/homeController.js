@@ -1,20 +1,22 @@
 const router = require('express').Router()
-const bookingServices = require('../services/bookingServices')
 const { isAuth } = require('../middlewares/authMiddleware')
-const userService = require('../services/userService')
+const courseServices = require('../services/courseServices')
+
 
 router.get('/', async (req, res) => {
-    const hotelOffer = await bookingServices.getAll().lean()
-    hotelOffer.sort((a, b) => b.freeRooms - a.freeRooms)
-    res.render('home', { hotelOffer })
-})
-
-router.get('/profile', isAuth, async (req, res) => {
-    const user = await userService.getOne(req.user?._id).lean()
-    const booked = await bookingServices.getAll(user.bookedHotels).lean()
-    const publicationTitles = booked.map(x => x.hotel).join(', ')
-    console.log(publicationTitles)
-    res.render('home/profile', { ...user, publicationTitles })
+    if(!req.user) {
+        let courseOffer = await courseServices.getAll().lean()
+        courseOffer.sort((a, b) => b.usersEnrolled.length - a.usersEnrolled.length)
+        courseOffer = courseOffer.slice(0, 3)
+        console.log(courseOffer)
+        res.render('home', { courseOffer }) 
+        
+    }else{
+        let courseOffer = await courseServices.getAll().lean()
+        courseOffer.sort((a, b) => b.created.length - a.created.length)
+    
+        res.render('home', { courseOffer }) 
+    }
 })
 
 module.exports = router
