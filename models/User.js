@@ -2,25 +2,20 @@ const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const { SALT_ROUNDS } = require('../config/env')
 const userSchema = new mongoose.Schema({
-    email: {
-        type: String,
-        required: [true, 'Email is required'],
-        unique: true,
-    },
+
     username: {
         type: String,
         required: [true, 'Username is required'],
         unique: true,
-        match: [/^[a-zA-Z0-9]+$/i, 'Username may contain only english letter and numbers']
+        match: [/^[a-zA-Z0-9]+$/i, 'Username may contain only english letters and numbers']
     },
     password: {
         type: String,
         required: true,
+        match: [/^[a-zA-Z0-9]+$/i, 'Password may contain only english letters and numbers']
+
     },
-    bookedHotels: {
-        type: String,
-    },
-    offeredHotels: {
+    enrolledCourses: {
         type: String,
     }
 })
